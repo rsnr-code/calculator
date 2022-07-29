@@ -1,8 +1,9 @@
+//creating variables to use in later functions
 let currentNumber = '';
 let previousNumber = '';
 let operator = '';
 
-const numberButtons = document.querySelectorAll('.number')
+const numberButton = document.querySelectorAll('.number')
 const operationButton = document.querySelectorAll('.operator')
 const equalsButton = document.querySelector('.equals')
 const deleteButton = document.querySelector('.delete')
@@ -11,12 +12,18 @@ const decimalButton = document.querySelector('.decimal')
 const previousDisplayNumber = document.querySelector('.previous-operand')
 const currentDisplayNumber = document.querySelector('.current-operand') 
 
-equalsButton.addEventListener('click', calculate);
+equalsButton.addEventListener('click', () => {
+    if(currentNumber != "" && previousNumber != ""){
+        calculate();
+    }
+});
+
 clearButton.addEventListener('click', clearDisplay);
-decimalButton.addEventListener('click', );
+decimalButton.addEventListener('click', addDecimal);
+deleteButton.addEventListener('click', handleDelete);
 
 // this adds an Event Listener to each of the number buttons; when clicked, the text content of the button will be appended.
-numberButtons.forEach((button) => {
+numberButton.forEach((button) => {
     button.addEventListener('click', (e) => {
         handleNumber(e.target.textContent)})
 })
@@ -28,16 +35,34 @@ operationButton.forEach((button) => {
 })
 
 function handleNumber(number) {
+   if (previousNumber !== "" && currentNumber !== "" && operator === ""){
+    previousNumber = "";
+    currentDisplayNumber.textContent = currentNumber;
+   }else {
     currentNumber += number;
     currentDisplayNumber.textContent = currentNumber;
+   }
 }
 
 function handleOperator(op){
-    operator = op;
-    previousNumber = currentNumber;
+    if (previousNumber === "") {
+        previousNumber = currentNumber;
+        operatorCheck(op);
+    }else if (currentNumber === "") {
+        operatorCheck(op);
+    }else {
+        calculate();
+        operator = op;
+        currentDisplayNumber.textContent = "0";
+        previousDisplayNumber.textContent = `${previousNumber} ${operator}`;
+    }
+}
+
+function operatorCheck(text) {
+    operator = text;
     previousDisplayNumber.textContent = `${previousNumber} ${operator}`;
-    currentNumber = '';
-    currentDisplayNumber.textContent = '';
+    currentDisplayNumber.textContent = "0";
+    currentNumber = "";
 }
 
 function calculate(){
@@ -45,11 +70,11 @@ function calculate(){
     currentNumber = Number(currentNumber);
 
     if (operator === "+") {
-        previousNumber = previousNumber + currentNumber;
+        previousNumber += currentNumber;
     }else if (operator === "-") {
-        previousNumber = previousNumber - currentNumber;
+        previousNumber -= currentNumber;
     }else if (operator === "×") {
-        previousNumber = previousNumber * currentNumber;
+        previousNumber *= currentNumber;
     }else if (operator === "÷") {
         if (currentNumber <= 0) {
             previousNumber = 'Error';
@@ -58,12 +83,13 @@ function calculate(){
             operator = '';
             return
         }
-        previousNumber = previousNumber / currentNumber;
+        previousNumber /= currentNumber;
     }
     previousNumber = previousNumber.toString();
     previousDisplayNumber.textContent = '';
     currentDisplayNumber.textContent = previousNumber;
     operator = '';
+    currentNumber = "";
 }
 
 function clearDisplay() {
@@ -72,4 +98,18 @@ function clearDisplay() {
     operator = '';
     previousDisplayNumber.textContent = '';
     currentDisplayNumber.textContent = '0';
+}
+
+function addDecimal() {
+    if (!currentNumber.includes('.')){
+        currentNumber += '.';
+        currentDisplayNumber.textContent = currentNumber;
+    }
+}
+
+function handleDelete(){
+    if (currentNumber !== ""){
+        currentNumber = currentNumber.slice(0, -1);
+        currentDisplayNumber.textContent = currentNumber;
+    } 
 }
