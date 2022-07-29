@@ -1,8 +1,9 @@
-//creating variables to use in later functions
+// Variables
 let currentNumber = '';
 let previousNumber = '';
 let operator = '';
 
+// DOM elements
 const numberButton = document.querySelectorAll('.number')
 const operationButton = document.querySelectorAll('.operator')
 const equalsButton = document.querySelector('.equals')
@@ -12,17 +13,17 @@ const decimalButton = document.querySelector('.decimal')
 const previousDisplayNumber = document.querySelector('.previous-operand')
 const currentDisplayNumber = document.querySelector('.current-operand') 
 
-equalsButton.addEventListener('click', () => {
-    if(currentNumber != "" && previousNumber != ""){
-        calculate();
-    }
-});
-
+// Events
 clearButton.addEventListener('click', clearDisplay);
 decimalButton.addEventListener('click', addDecimal);
 deleteButton.addEventListener('click', handleDelete);
 
-// this adds an Event Listener to each of the number buttons; when clicked, the text content of the button will be appended.
+equalsButton.addEventListener('click', () => {
+    if(currentNumber != "" && previousNumber != ""){
+        operate();
+    }
+});
+
 numberButton.forEach((button) => {
     button.addEventListener('click', (e) => {
         handleNumber(e.target.textContent)})
@@ -34,6 +35,7 @@ operationButton.forEach((button) => {
     });
 })
 
+// Functions
 function handleNumber(number) {
    if (previousNumber !== "" && currentNumber !== "" && operator === ""){
     previousNumber = "";
@@ -51,7 +53,7 @@ function handleOperator(op){
     }else if (currentNumber === "") {
         operatorCheck(op);
     }else {
-        calculate();
+        operator();
         operator = op;
         currentDisplayNumber.textContent = "0";
         previousDisplayNumber.textContent = `${previousNumber} ${operator}`;
@@ -65,7 +67,7 @@ function operatorCheck(text) {
     currentNumber = "";
 }
 
-function calculate(){
+function operate(){
     previousNumber = Number(previousNumber);
     currentNumber = Number(currentNumber);
 
