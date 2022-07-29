@@ -36,6 +36,37 @@ operationButton.forEach((button) => {
 })
 
 // Functions
+function operate(){
+    previousNumber = Number(previousNumber);
+    currentNumber = Number(currentNumber);
+
+    if (operator === "+") {
+        previousNumber += currentNumber;
+    }else if (operator === "-") {
+        previousNumber -= currentNumber;
+    }else if (operator === "×") {
+        previousNumber *= currentNumber;
+    }else if (operator === "÷") {
+        if (currentNumber <= 0) {
+            currentNumber = "Error";
+            previousDisplayNumber.textContent = '';
+            currentDisplayNumber.textContent = currentNumber;
+            operator = '';
+            return
+        }
+        previousNumber /= currentNumber;
+    }
+    displayAnswer();
+}
+
+function displayAnswer(){
+    previousNumber = previousNumber.toString();
+    previousDisplayNumber.textContent = '';
+    currentDisplayNumber.textContent = previousNumber;
+    operator = '';
+    currentNumber = "";
+}
+
 function handleNumber(number) {
    if (previousNumber !== "" && currentNumber !== "" && operator === ""){
     previousNumber = "";
@@ -64,33 +95,6 @@ function operatorCheck(text) {
     operator = text;
     previousDisplayNumber.textContent = `${previousNumber} ${operator}`;
     currentDisplayNumber.textContent = "0";
-    currentNumber = "";
-}
-
-function operate(){
-    previousNumber = Number(previousNumber);
-    currentNumber = Number(currentNumber);
-
-    if (operator === "+") {
-        previousNumber += currentNumber;
-    }else if (operator === "-") {
-        previousNumber -= currentNumber;
-    }else if (operator === "×") {
-        previousNumber *= currentNumber;
-    }else if (operator === "÷") {
-        if (currentNumber <= 0) {
-            previousNumber = 'Error';
-            previousDisplayNumber.textContent = '';
-            currentDisplayNumber.textContent = previousNumber;
-            operator = '';
-            return
-        }
-        previousNumber /= currentNumber;
-    }
-    previousNumber = previousNumber.toString();
-    previousDisplayNumber.textContent = '';
-    currentDisplayNumber.textContent = previousNumber;
-    operator = '';
     currentNumber = "";
 }
 
